@@ -3,11 +3,12 @@
 	import * as Popover from '$lib/components/ui/popover';
 	import * as Pagination from '$lib/components/ui/pagination';
 	import * as Select from '$lib/components/ui/select';
+	import * as Table from '$lib/components/ui/table';
 	import { Input } from '$lib/components/ui/input';
 	import { Button } from '$lib/components/ui/button';
 	import { Badge } from '$lib/components/ui/badge';
 	import { Label } from '$lib/components/ui/label';
-	import DataTable from '$lib/components/self/DataTable.svelte';
+	import CoinIcon from '$lib/components/self/CoinIcon.svelte';
 	import SEO from '$lib/components/self/SEO.svelte';
 	import { onMount } from 'svelte';
 	import { toast } from 'svelte-sonner';
@@ -21,7 +22,9 @@
 		ArrowLeft01Icon,
 		ArrowRight01Icon,
 		ReceiptDollarIcon,
-		Invoice03Icon
+		Invoice03Icon,
+		ArrowDown01Icon,
+		FileEditIcon
 	} from '@hugeicons/core-free-icons';
 	import { formatPrice, formatValue, formatQuantity, formatDate, debounce } from '$lib/utils';
 	import { MediaQuery } from 'svelte/reactivity';
@@ -35,6 +38,17 @@
 	let sortOrder = $state($page.url.searchParams.get('sortOrder') || 'desc');
 	let showFilterPopover = $state(false);
 	let currentPage = $state(parseInt($page.url.searchParams.get('page') || '1'));
+	let expandedRows = $state<Set<number>>(new Set());
+
+	function toggleRow(id: number) {
+		const next = new Set(expandedRows);
+		if (next.has(id)) {
+			next.delete(id);
+		} else {
+			next.add(id);
+		}
+		expandedRows = next;
+	}
 
 	const isDesktop = new MediaQuery('(min-width: 768px)');
 	let perPage = $derived(isDesktop.current ? 20 : 15);
@@ -209,124 +223,6 @@
 	let currentSortOrderLabel = $derived(
 		sortOrderOptions.find((option) => option.value === sortOrder)?.label || 'Newest first'
 	);
-
-	// Column configurations for transactions table
-	let transactionsColumns = $derived([
-		{
-			key: 'type',
-			label: 'Type',
-			class: 'w-[10%] min-w-[80px]',
-			render: (value: any, row: any) => {
-				if (row.isTransfer) {
-					return {
-						component: 'badge',
-						variant: 'default',
-						text: row.isIncoming ? 'Received' : 'Sent',
-						class: 'text-xs'
-					};
-				}
-				return {
-					component: 'badge',
-					variant: value === 'BUY' ? 'success' : 'destructive',
-					text: value === 'BUY' ? 'Buy' : 'Sell',
-					class: 'text-xs'
-				};
-			}
-		},
-		{
-			key: 'coin',
-			label: 'Asset',
-			class: 'w-[20%] min-w-[120px]',
-			render: (value: any, row: any) => {
-				if (row.isTransfer) {
-					if (row.isCoinTransfer && row.coin) {
-						return {
-							component: 'coin',
-							icon: row.coin.icon,
-							symbol: row.coin.symbol,
-							name: `*${row.coin.symbol}`,
-							size: 6
-						};
-					}
-					return {
-						component: 'text',
-						text: 'Cash ($)',
-						class: 'font-medium'
-					};
-				}
-				return {
-					component: 'coin',
-					icon: row.coin.icon,
-					symbol: row.coin.symbol,
-					name: `*${row.coin.symbol}`,
-					size: 6
-				};
-			}
-		},
-		{
-			key: 'sender',
-			label: 'Sender',
-			class: 'w-[12%] min-w-[80px]',
-			render: (value: any, row: any) => ({
-				component: 'text',
-				text: row.isTransfer ? row.sender || 'Unknown' : '-',
-				class:
-					row.isTransfer && row.sender && row.sender !== 'Unknown'
-						? 'font-medium'
-						: 'text-muted-foreground'
-			})
-		},
-		{
-			key: 'recipient',
-			label: 'Receiver',
-			class: 'w-[12%] min-w-[80px]',
-			render: (value: any, row: any) => ({
-				component: 'text',
-				text: row.isTransfer ? row.recipient || 'Unknown' : '-',
-				class:
-					row.isTransfer && row.recipient && row.recipient !== 'Unknown'
-						? 'font-medium'
-						: 'text-muted-foreground'
-			})
-		},
-		{
-			key: 'quantity',
-			label: 'Quantity',
-			class: 'w-[15%] min-w-[100px] font-mono',
-			render: (value: any, row: any) => {
-				if (row.isTransfer && value === 0) {
-					return '-';
-				}
-				return formatQuantity(value);
-			}
-		},
-		{
-			key: 'pricePerCoin',
-			label: 'Price',
-			class: 'w-[15%] min-w-[80px] font-mono',
-			render: (value: any, row: any) => {
-				if (row.isTransfer || value === 0) {
-					return '-';
-				}
-				return `$${formatPrice(value)}`;
-			}
-		},
-		{
-			key: 'totalBaseCurrencyAmount',
-			label: 'Total',
-			class: 'w-[15%] min-w-[80px] font-mono font-medium',
-			render: (value: any, row: any) => {
-				const prefix = row.type === 'TRANSFER_IN' || row.type === 'BUY' ? '+' : '-';
-				return `${prefix}${formatValue(value)}`;
-			}
-		},
-		{
-			key: 'timestamp',
-			label: 'Date',
-			class: 'w-[25%] min-w-[120px] text-muted-foreground',
-			render: (value: any) => formatDate(value)
-		}
-	]);
 </script>
 
 <SEO
@@ -493,21 +389,136 @@
 						<div class="bg-muted h-16 animate-pulse rounded-lg"></div>
 					{/each}
 				</div>
+			{:else if transactions.length === 0}
+				<div class="py-12 text-center">
+					<div class="bg-muted mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full">
+						<HugeiconsIcon icon={Invoice03Icon} class="text-muted-foreground h-6 w-6" />
+					</div>
+					<h3 class="mb-2 text-lg font-semibold">No transactions found</h3>
+					<p class="text-muted-foreground">
+						{hasActiveFilters
+							? 'No transactions match your current filters. Try adjusting your search criteria.'
+							: "You haven't made any trades or transfers yet. Start by buying coins or sending money to other users."}
+					</p>
+				</div>
 			{:else}
-				<DataTable
-					columns={transactionsColumns}
-					data={transactions}
-					onRowClick={(tx) => {
-						if (tx.coin) {
-							goto(`/coin/${tx.coin.symbol}`);
-						}
-					}}
-					emptyIcon={Invoice03Icon}
-					emptyTitle="No transactions found"
-					emptyDescription={hasActiveFilters
-						? 'No transactions match your current filters. Try adjusting your search criteria.'
-						: "You haven't made any trades or transfers yet. Start by buying coins or sending money to other users."}
-				/>
+				<Table.Root>
+					<Table.Header>
+						<Table.Row>
+							<Table.Head class="w-[10%] min-w-[80px]">Type</Table.Head>
+							<Table.Head class="w-[20%] min-w-[120px]">Asset</Table.Head>
+							<Table.Head class="w-[12%] min-w-[80px]">Sender</Table.Head>
+							<Table.Head class="w-[12%] min-w-[80px]">Receiver</Table.Head>
+							<Table.Head class="w-[15%] min-w-[100px] font-mono">Quantity</Table.Head>
+							<Table.Head class="w-[15%] min-w-[80px] font-mono">Price</Table.Head>
+							<Table.Head class="w-[15%] min-w-[80px] font-mono">Total</Table.Head>
+							<Table.Head class="w-[25%] min-w-[120px]">Date</Table.Head>
+							<!-- chevron column -->
+							<Table.Head class="w-8"></Table.Head>
+						</Table.Row>
+					</Table.Header>
+					<Table.Body>
+						{#each transactions as tx (tx.id)}
+							{@const isExpanded = expandedRows.has(tx.id)}
+							{@const hasNote = tx.isTransfer && tx.note}
+							<!-- Main row -->
+							<Table.Row
+								class="hover:bg-muted/50 cursor-pointer select-none transition-colors"
+								onclick={() => toggleRow(tx.id)}
+							>
+								<!-- Type -->
+								<Table.Cell>
+									{#if tx.isTransfer}
+										<Badge variant="default" class="text-xs">
+											{tx.isIncoming ? 'Received' : 'Sent'}
+										</Badge>
+									{:else}
+										<Badge variant={tx.type === 'BUY' ? 'success' : 'destructive'} class="text-xs">
+											{tx.type === 'BUY' ? 'Buy' : 'Sell'}
+										</Badge>
+									{/if}
+								</Table.Cell>
+								<!-- Asset — link stops propagation so clicking coin navigates, not expands -->
+								<Table.Cell>
+									{#if tx.isTransfer && !tx.isCoinTransfer}
+										<span class="font-medium">Cash ($)</span>
+									{:else if tx.coin}
+										<a
+											href="/coin/{tx.coin.symbol}"
+											class="flex items-center gap-2 hover:underline"
+											onclick={(e) => e.stopPropagation()}
+										>
+											<CoinIcon icon={tx.coin.icon} symbol={tx.coin.symbol} size={6} />
+											<span class="font-medium max-w-44 truncate">*{tx.coin.symbol}</span>
+										</a>
+									{/if}
+								</Table.Cell>
+								<!-- Sender -->
+								<Table.Cell>
+									{#if tx.isTransfer && tx.sender}
+										<span class="font-medium">{tx.sender}</span>
+									{:else}
+										<span class="text-muted-foreground">-</span>
+									{/if}
+								</Table.Cell>
+								<!-- Receiver -->
+								<Table.Cell>
+									{#if tx.isTransfer && tx.recipient}
+										<span class="font-medium">{tx.recipient}</span>
+									{:else}
+										<span class="text-muted-foreground">-</span>
+									{/if}
+								</Table.Cell>
+								<!-- Quantity -->
+								<Table.Cell class="font-mono">
+									{#if tx.isTransfer && tx.quantity === 0}
+										<span class="text-muted-foreground">-</span>
+									{:else}
+										{formatQuantity(tx.quantity)}
+									{/if}
+								</Table.Cell>
+								<!-- Price -->
+								<Table.Cell class="font-mono">
+									{#if tx.isTransfer || tx.pricePerCoin === 0}
+										<span class="text-muted-foreground">-</span>
+									{:else}
+										${formatPrice(tx.pricePerCoin)}
+									{/if}
+								</Table.Cell>
+								<!-- Total -->
+								<Table.Cell class="font-mono font-medium">
+									{tx.type === 'TRANSFER_IN' || tx.type === 'BUY' ? '+' : '-'}{formatValue(tx.totalBaseCurrencyAmount)}
+								</Table.Cell>
+								<!-- Date -->
+								<Table.Cell class="text-muted-foreground text-sm">
+									{formatDate(tx.timestamp)}
+								</Table.Cell>
+								<!-- Chevron -->
+								<Table.Cell class="w-8 pr-3 text-right">
+									<HugeiconsIcon
+										icon={ArrowDown01Icon}
+										class="text-muted-foreground h-4 w-4 transition-transform duration-200 {isExpanded ? 'rotate-180' : ''} {hasNote ? '' : 'opacity-30'}"
+									/>
+								</Table.Cell>
+							</Table.Row>
+							<!-- Expanded detail row -->
+							{#if isExpanded}
+								<Table.Row class="bg-muted/30 hover:bg-muted/30">
+									<Table.Cell colspan={9} class="px-6 py-3">
+										<div class="flex items-start gap-2 text-sm">
+											<HugeiconsIcon icon={FileEditIcon} class="text-muted-foreground mt-0.5 h-4 w-4 shrink-0" />
+											{#if hasNote}
+												<p class="text-foreground whitespace-pre-wrap">{tx.note}</p>
+											{:else}
+												<p class="text-muted-foreground italic">No note attached to this transfer.</p>
+											{/if}
+										</div>
+									</Table.Cell>
+								</Table.Row>
+							{/if}
+						{/each}
+					</Table.Body>
+				</Table.Root>
 			{/if}
 		</Card.Content>
 	</Card.Root>

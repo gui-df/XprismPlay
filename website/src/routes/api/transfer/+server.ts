@@ -13,6 +13,7 @@ interface TransferRequest {
     type: 'CASH' | 'COIN';
     amount: number;
     coinSymbol?: string;
+    note?: string;
 }
 
 export const POST: RequestHandler = async ({ request }) => {
@@ -23,11 +24,22 @@ export const POST: RequestHandler = async ({ request }) => {
     if (!session?.user) {
         throw error(401, 'Not authenticated');
     } try {
-        const { recipientUsername, type, amount, coinSymbol }: TransferRequest = await request.json();
+        const { recipientUsername, type, amount, coinSymbol, note }: TransferRequest = await request.json();
 
         if (!recipientUsername || !type || !amount || typeof amount !== 'number' || !Number.isFinite(amount) || amount <= 0) {
             throw error(400, 'Invalid transfer parameters');
         }
+
+        if (note !== undefined && note !== null) {
+            if (typeof note !== 'string') {
+                throw error(400, 'Note must be a string');
+            }
+            if ([...note].length > 500) {
+                throw error(400, 'Note must be 500 characters or fewer');
+            }
+        }
+
+        const sanitizedNote = note && note.trim().length > 0 ? note.trim() : null;
 
         if (amount > Number.MAX_SAFE_INTEGER) {
             throw error(400, 'Transfer amount too large');
@@ -111,7 +123,8 @@ export const POST: RequestHandler = async ({ request }) => {
                     totalBaseCurrencyAmount: amount.toString(),
                     timestamp: new Date(),
                     senderUserId: senderId,
-                    recipientUserId: recipientData.id
+                    recipientUserId: recipientData.id,
+                    note: sanitizedNote
                 });
 
                 await tx.insert(transaction).values({
@@ -123,7 +136,8 @@ export const POST: RequestHandler = async ({ request }) => {
                     totalBaseCurrencyAmount: amount.toString(),
                     timestamp: new Date(),
                     senderUserId: senderId,
-                    recipientUserId: recipientData.id
+                    recipientUserId: recipientData.id,
+                    note: sanitizedNote
                 });
 
                 (async () => {
@@ -247,7 +261,8 @@ export const POST: RequestHandler = async ({ request }) => {
                     totalBaseCurrencyAmount: totalValue.toString(),
                     timestamp: new Date(),
                     senderUserId: senderId,
-                    recipientUserId: recipientData.id
+                    recipientUserId: recipientData.id,
+                    note: sanitizedNote
                 });
 
                 await tx.insert(transaction).values({
@@ -259,7 +274,8 @@ export const POST: RequestHandler = async ({ request }) => {
                     totalBaseCurrencyAmount: totalValue.toString(),
                     timestamp: new Date(),
                     senderUserId: senderId,
-                    recipientUserId: recipientData.id
+                    recipientUserId: recipientData.id,
+                    note: sanitizedNote
                 });
 
                 (async () => {

@@ -5,6 +5,7 @@
 	import { Input } from '$lib/components/ui/input';
 	import { Label } from '$lib/components/ui/label';
 	import { Badge } from '$lib/components/ui/badge';
+	import { Textarea } from '$lib/components/ui/textarea';
 	import { HugeiconsIcon } from '@hugeicons/svelte';
 	import {
 		DollarCircleIcon,
@@ -30,6 +31,7 @@
 	let transferType = $state('CASH');
 	let amount = $state('');
 	let selectedCoinSymbol = $state('');
+	let note = $state('');
 	let loading = $state(false);
 
 	let numericAmount = $derived(parseFloat(amount) || 0);
@@ -64,12 +66,16 @@
 
 	let isWithinCoinValueLimit = $derived(transferType === 'COIN' ? estimatedValue >= 10 : true);
 
+	let noteCharCount = $derived([...note].length);
+	let isNoteValid = $derived(noteCharCount <= 500);
+
 	let canSend = $derived(
 		hasValidAmount &&
 			hasValidRecipient &&
 			hasEnoughFunds &&
 			isWithinCashLimit &&
 			isWithinCoinValueLimit &&
+			isNoteValid &&
 			!loading &&
 			(transferType === 'CASH' || selectedCoinSymbol.length > 0)
 	);
@@ -80,6 +86,7 @@
 		transferType = 'CASH';
 		amount = '';
 		selectedCoinSymbol = '';
+		note = '';
 		loading = false;
 	}
 
@@ -121,7 +128,8 @@
 					recipientUsername: recipientUsername.trim(),
 					type: transferType,
 					amount: numericAmount,
-					coinSymbol: transferType === 'COIN' ? selectedCoinSymbol : undefined
+					coinSymbol: transferType === 'COIN' ? selectedCoinSymbol : undefined,
+					note: note.trim() || undefined
 				})
 			});
 
@@ -296,6 +304,21 @@
 				{:else if transferType === 'COIN'}
 					<p class="text-muted-foreground text-xs">Minimum estimated value: $10.00 per transfer</p>
 				{/if}
+			</div>
+
+			<!-- Optional Note -->
+			<div class="space-y-2">
+				<Label for="note">Note <span class="text-muted-foreground font-normal">(optional)</span></Label>
+				<Textarea
+					id="note"
+					bind:value={note}
+					placeholder="Add a reference note to this transfer…"
+					class="resize-none text-sm"
+					rows={3}
+				/>
+				<p class="text-end text-xs {noteCharCount > 500 ? 'text-destructive font-medium' : 'text-muted-foreground'}">
+					{noteCharCount}/500
+				</p>
 			</div>
 
 			{#if !hasEnoughFunds && hasValidAmount}

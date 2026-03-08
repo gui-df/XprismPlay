@@ -43,6 +43,13 @@
       "when": 1771778368210,
       "tag": "0005_increase_decimal_precision",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1772000000000,
+      "tag": "0008_transfer_note",
+      "breakpoints": true
     }
   ]
 }
