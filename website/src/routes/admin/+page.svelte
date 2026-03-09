@@ -27,6 +27,7 @@
 			icon: Ticket01Icon,
 			url: '/admin/promo',
 			color: 'text-green-500'
+<<<<<<< HEAD
 		},
 		{
 			title: 'Admin Logs',
@@ -34,6 +35,8 @@
 			icon: Shield01Icon,
 			url: '/admin/logs',
 			color: 'text-orange-500'
+=======
+>>>>>>> 48076d138d7067239ebb4b5f458d3785fea4440d
 		}
 	];
 </script>
