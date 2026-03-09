@@ -11,8 +11,7 @@
 		LegalHammerIcon,
 		UserCheck01Icon,
 		Ticket01Icon,
-		Delete01Icon,
-		ActivityIcon
+		Cancel01Icon
 	} from '@hugeicons/core-free-icons';
 
 	let historicalLogs = $state<AdminLogEntry[]>([]);
@@ -67,7 +66,7 @@
 			case 'BAN': return LegalHammerIcon;
 			case 'UNBAN': return UserCheck01Icon;
 			case 'PROMO_CREATE': return Ticket01Icon;
-			case 'PROMO_DELETE': return Delete01Icon;
+			case 'PROMO_DELETE': return Cancel01Icon;
 		}
 	}
 
@@ -138,7 +137,7 @@
 					</div>
 				{:else if allLogs.length === 0}
 					<div class="text-muted-foreground py-16 text-center">
-						<HugeiconsIcon icon={ActivityIcon} class="mx-auto mb-3 h-10 w-10 opacity-30" />
+						<HugeiconsIcon icon={Shield01Icon} class="mx-auto mb-3 h-10 w-10 opacity-30" />
 						<p class="text-sm">No admin actions logged yet.</p>
 					</div>
 				{:else}

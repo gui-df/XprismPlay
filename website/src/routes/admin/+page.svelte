@@ -9,12 +9,10 @@
 		Ticket01Icon, 
 		ArrowRight01Icon,
 		UserGroupIcon,
-		Analytics01Icon,
-		FileTextIcon
+		Analytics01Icon
 	} from '@hugeicons/core-free-icons';
 	import { goto } from '$app/navigation';
 
-	// Define the admin sections for the dashboard
 	const adminSections = [
 		{
 			title: 'User Management',
@@ -33,7 +31,7 @@
 		{
 			title: 'Admin Logs',
 			description: 'Live feed of all moderator and admin actions.',
-			icon: FileTextIcon,
+			icon: Shield01Icon,
 			url: '/admin/logs',
 			color: 'text-orange-500'
 		}

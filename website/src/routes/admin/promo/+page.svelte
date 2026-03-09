@@ -22,7 +22,7 @@
 		CancelCircleIcon,
 		Loading03Icon,
 		Tick01Icon,
-		Delete01Icon
+		Cancel01Icon
 	} from '@hugeicons/core-free-icons';
 	import { USER_DATA } from '$lib/stores/user-data';
 	import { formatDate, getExpirationDate } from '$lib/utils';
@@ -359,7 +359,7 @@
 												{#if isDeleting === promo.id}
 													<HugeiconsIcon icon={Loading03Icon} class="h-4 w-4 animate-spin" />
 												{:else}
-													<HugeiconsIcon icon={Delete01Icon} class="h-4 w-4" />
+													<HugeiconsIcon icon={Cancel01Icon} class="h-4 w-4" />
 												{/if}
 											</button>
 										</div>
