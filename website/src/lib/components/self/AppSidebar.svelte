@@ -157,6 +157,11 @@
 		setOpenMobile(false);
 	}
 
+	function handleAdminLogsClick() {
+		goto('/admin/logs');
+		setOpenMobile(false);
+	}
+
 	function handleTermsClick() {
 		goto('/legal/terms');
 		setOpenMobile(false);
@@ -527,6 +532,13 @@
 									>
 										<HugeiconsIcon icon={Ticket01Icon} class="text-primary" />
 										Manage codes
+									</DropdownMenu.Item>
+									<DropdownMenu.Item
+										onclick={handleAdminLogsClick}
+										class="text-primary hover:text-primary!"
+									>
+										<HugeiconsIcon icon={Shield01Icon} class="text-primary" />
+										Admin Logs
 									</DropdownMenu.Item>
 								</DropdownMenu.Group>
 							{/if}
