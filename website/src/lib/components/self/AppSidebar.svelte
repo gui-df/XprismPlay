@@ -66,7 +66,7 @@
 			{ title: $_('page_names.hopium'), url: '/hopium', icon: ArrowUpDownIcon },
 			{ title: $_('page_names.arcade'), url: '/arcade', icon: Joystick04Icon },
 			{ title: $_('page_names.leaderboard'), url: '/leaderboard', icon: ChampionIcon },
-			{ title: 'Shop', url: '/shop', icon: ShoppingBasket01Icon },
+			{ title: $_('page_names.shop'), url: '/shop', icon: ShoppingBasket01Icon },
 			{ title: $_('page_names.achievements'), url: '/achievements', icon: Award05Icon },
 			{ title: $_('page_names.portfolio'), url: '/portfolio', icon: Briefcase01Icon },
 			{ title: $_('page_names.treemap'), url: '/treemap', icon: Analytics01Icon },
@@ -196,7 +196,7 @@
 		<div class="flex items-center gap-2 px-2 py-2">
 			<img src="/rugplay.svg" class="h-5 w-5" alt="twoblade" />
 			<div class="flex items-center gap-2">
-				<span class="text-base font-semibold">Rugplay</span>
+				<span class="text-base font-semibold">XprismPlay</span>
 				{#if $USER_DATA?.isAdmin}
 					<span class="text-muted-foreground text-xs">| Admin</span>
 				{/if}
