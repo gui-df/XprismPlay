@@ -21,7 +21,6 @@
 	import { PORTFOLIO_DATA, fetchPortfolioData } from '$lib/stores/portfolio-data';
 	import SendMoneyModal from '$lib/components/self/SendMoneyModal.svelte';
 	import SignInConfirmDialog from '$lib/components/self/SignInConfirmDialog.svelte';
-	import AdLong from '$lib/components/self/ads/AdLong.svelte';
 	import { _ } from 'svelte-i18n';
 	// TODO: add type definitions
 	let transactions = $state<any[]>([]);
@@ -407,8 +406,6 @@
 					</Card.Content>
 				</Card.Root>
 			{/if}
-
-			<AdLong />
 
 			<!-- Recent Transactions -->
 			<Card.Root class="mt-8">
