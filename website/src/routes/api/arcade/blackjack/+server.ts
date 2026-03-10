@@ -426,7 +426,11 @@ export const POST: RequestHandler = async ({ request }) => {
                 if (settled) {
                     const won = updatedSession.playerHands.some(h => h.status === 'won' || h.status === 'blackjack');
                     await publishArcadeActivity(userId, updatedSession.betAmount, won, 'blackjack', 2500);
-                    await checkAndAwardAchievements(userId, ['arcade', 'wealth'], { arcadeWon: won, arcadeWager: updatedSession.betAmount });
+                    await checkAndAwardAchievements(userId, ['arcade', 'wealth'], {
+                        arcadeWon: won,
+                        arcadeWager: updatedSession.betAmount,
+                        cardsValue: value
+                    });
                     return json({ ...buildClientState(updatedSession), newBalance });
                 }
 

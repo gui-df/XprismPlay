@@ -359,6 +359,16 @@ export const ACHIEVEMENTS: AchievementDef[] = [
 		category: 'arcade'
 	},
 	{
+		id: 'blackjack_21',
+		name: 'Right on 21',
+		description: 'Win blackjack by landing on 21',
+		icon: 'blackjack21.png',
+		difficulty: 'easy',
+		cashReward: 5000,
+		gemReward: 25,
+		category: 'arcade'
+	},
+	{
 		id: 'arcade_100',
 		name: 'Degen',
 		description: 'Play 100 arcade games',
