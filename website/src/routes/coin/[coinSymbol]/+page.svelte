@@ -49,6 +49,7 @@
 	let userHolding = $state(0);
 	let buyModalOpen = $state(false);
 	let sellModalOpen = $state(false);
+	let burnModalOpen = $state(false);
 	let selectedTimeframe = $state(data.timeframe || '1m');
 	let lastPriceUpdateTime = 0;
 	let shouldSignIn = $state(false);
@@ -544,6 +545,13 @@
 		{userHolding}
 		onSuccess={handleTradeSuccess}
 	/>
+		<TradeModal
+		bind:open={burnModalOpen}
+		type="BURN"
+		{coin}
+		{userHolding}
+		onSuccess={handleBurnSuccess}
+	/>
 {/if}
 <div class="container mx-auto max-w-7xl p-6">
 	{#if loading}
@@ -726,6 +734,16 @@
 									>
 										<HugeiconsIcon icon={TradeDownIcon} class="h-4 w-4" />
 										Sell {coin.symbol}
+									</Button>
+									<Button
+										class="w-full"
+										variant="outline"
+										size="lg"
+										onclick={() => (burnModalOpen = true)}
+										disabled={!coin.isListed || userHolding <= 0 || !canTrade}
+									>
+										<HugeiconsIcon icon={Coins01Icon} class="h-4 w-4" />
+										Burn {coin.symbol} Tokens
 									</Button>
 								</div>
 							{:else}
