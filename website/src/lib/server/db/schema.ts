@@ -100,7 +100,8 @@ export const user = pgTable(
 		gems: integer('gems').notNull().default(0),
 		nameColor: text('name_color'),
 		founderBadge: boolean('founder_badge').notNull().default(false),
-		disableMentions: boolean('disable_mentions').notNull().default(false)
+		disableMentions: boolean('disable_mentions').notNull().default(false),
+		timezone: integer('timezone').default(0)
 	},
 	(table) => {
 		return {
@@ -543,7 +544,8 @@ export const adminActionEnum = pgEnum('admin_action', [
 	'BAN',
 	'UNBAN',
 	'PROMO_CREATE',
-	'PROMO_DELETE'
+	'PROMO_DELETE',
+	'TOGGLE_ADMIN'
 ]);
 
 export const adminLog = pgTable(
