@@ -73,10 +73,10 @@ export default {
 		],
 		trade: {
 			title: 'Negocie {{symbol}}',
-			youOwn: "Você tem: {{shares}} {{symbol}}",
+			youOwn: 'Você tem: {{shares}} {{symbol}}',
 			lock: [
-				"🔒 Período exclusivo para o criador: {{time}} restantes",
-				"🔒 Negociação desbloqueia em: {{time}}"
+				'🔒 Período exclusivo para o criador: {{time}} restantes',
+				'🔒 Negociação desbloqueia em: {{time}}'
 			],
 			buy: {
 				title: 'Comprar {{symbol}}',

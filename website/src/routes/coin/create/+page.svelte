@@ -200,7 +200,7 @@
 									type="text"
 									bind:value={name}
 									placeholder="e.g., Bitcoin"
-									maxlength={46 /* So user sees the warning */}
+									maxlength={46}
 									required
 								/>
 								{#if nameError}
@@ -226,7 +226,7 @@
 										bind:value={symbol}
 										placeholder="BTC"
 										class="pl-8 uppercase"
-										maxlength={17 /* So user sees the warning */}
+										maxlength={17}
 										required
 									/>
 								</div>

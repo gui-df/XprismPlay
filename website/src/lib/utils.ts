@@ -363,11 +363,11 @@ export function timeToLocal(originalTime: number): number {
 export const PRESTIGE_COSTS = {
 	1: 100_000,
 	2: 250_000, // 2.5x
-	3: 1_000_000, // 4x
-	4: 5_000_000, // 5x
-	5: 25_000_000, // 5x
-	6: 62_500_000, // 2.5x
-	7: 250_000_000 // 4x
+	3: 625_000, // 2.5x
+	4: 1_562_500, // 2.5x
+	5: 3_906_250, // 2.5x
+	6: 9_765_625, // 2.5x
+	7: 24_414_062 // 2.5x
 } as const;
 
 export const PRESTIGE_NAMES = {

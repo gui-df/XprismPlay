@@ -21,7 +21,8 @@ export default {
 		amount: 'Amount',
 		date: 'Date',
 		note: 'Note',
-		value: 'Value'
+		value: 'Value',
+		live: '● LIVE'
 	},
 	greetings: {
 		good_morning: 'Good Morning, {{name}}!',
@@ -58,6 +59,7 @@ export default {
 		marketcap: 'Market Cap',
 		volume24h: 'Volume (24h)',
 		createdBy: 'Created by',
+		delisted: 'Delisted',
 		priceChart: [
 			'Price Chart ({{time}})',
 			'1 minute',
@@ -70,11 +72,8 @@ export default {
 		],
 		trade: {
 			title: 'Trade {{symbol}}',
-			youOwn: "You own: {{shares}} {{symbol}}",
-			lock: [
-				"🔒 Creator-only period: {{time}} remaining",
-				"🔒 Trading unlocks in: {{time}}"
-			],
+			youOwn: 'You own: {{shares}} {{symbol}}',
+			lock: ['🔒 Creator-only period: {{time}} remaining', '🔒 Trading unlocks in: {{time}}'],
 			buy: {
 				title: 'Buy {{symbol}}',
 				current: 'Current price: ${{price}} per {{symbol}}',
