@@ -58,7 +58,51 @@ export default {
 	coin: {
 		'24hchange': 'Mudança em 24h',
 		marketcap: 'Capitalização de Mercado',
-		volume24h: 'Volume (24h)'
+		volume24h: 'Volume (24h)',
+
+		createdBy: 'Criado por',
+		priceChart: [
+			'Gráfico de Preços ({{time}})',
+			'1 minuto',
+			'5 minutos',
+			'15 minutos',
+			'1 hora',
+			'4 horas',
+			'1 dia',
+			'Nenhum dado de troca disponível'
+		],
+		trade: {
+			title: 'Negocie {{symbol}}',
+			youOwn: 'Você tem: {{shares}} {{symbol}}',
+			lock: [
+				'🔒 Período exclusivo para o criador: {{time}} restantes',
+				'🔒 Negociação desbloqueia em: {{time}}'
+			],
+			buy: {
+				title: 'Comprar {{symbol}}',
+				current: 'Preço atual: ${{price}} por {{symbol}}',
+				amountSpend: ['Quantidade para gastar ($)', 'Saldo: {{balance}}'],
+				buy: 'Compre {{symbol}}'
+			},
+			sell: {
+				title: 'Vender {{symbol}}'
+			},
+			burn: {
+				title: 'Queimar Tokens de {{symbol}}'
+			}
+		},
+		pool: {
+			title: 'Composição do Pool',
+			baseCurrency: 'Moeda Base:',
+			burnedCoins: 'Moedas Queimadas:',
+			stats: {
+				liquity: 'Liquidez Total:',
+				currentPrice: 'Preço Atual:'
+			}
+		},
+		topHolders: {
+			title: 'Maiores Acionistas'
+		}
 	},
 	sign_in: {
 		message: ['Você precisa', 'fazer login', 'para jogar.'],
@@ -76,7 +120,9 @@ export default {
 				'Políticas de Privacidade'
 			]
 		},
-		portfolio: ['Você precisa estar logado para ver seu portfólio', 'Fazer Login']
+		portfolio: ['Você precisa estar logado para ver seu portfólio', 'Fazer Login'],
+		sign_in: 'Fazer Login',
+		trade: 'Você precisa estar logado para negociar.'
 	},
 	leaderboard: {
 		title: 'Placar de Líderes',
