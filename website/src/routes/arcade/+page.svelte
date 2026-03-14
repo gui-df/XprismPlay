@@ -10,6 +10,7 @@
 	import Dice from '$lib/components/self/games/Dice.svelte';
 	import Tower from '$lib/components/self/games/Tower.svelte';
 	import Blackjack from '$lib/components/self/games/Blackjack.svelte';
+	import HigherLower from '$lib/components/self/games/HigherLower.svelte';
 	import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '$lib/components/ui/card';
 	import { arcadeActivityStore } from '$lib/stores/websocket';
 	import * as Avatar from '$lib/components/ui/avatar';
@@ -24,7 +25,8 @@
 		BombIcon,
 		DiceIcon,
 		ElectricTower01Icon,
-		SpadesIcon
+		SpadesIcon,
+		CurvyUpDownDirectionIcon
 	} from '@hugeicons/core-free-icons';
 	import { formatValue, formatRelativeTime, getPublicUrl } from '$lib/utils';
 	import { goto } from '$app/navigation';
@@ -35,7 +37,8 @@
 		{ id: 'mines', label: 'Mines', icon: BombIcon },
 		{ id: 'dice', label: 'Dice', icon: DiceIcon },
 		{ id: 'tower', label: 'Tower', icon: ElectricTower01Icon },
-		{ id: 'blackjack', label: 'Blackjack', icon: SpadesIcon }
+		{ id: 'blackjack', label: 'Blackjack', icon: SpadesIcon },
+		{ id: 'higherlower', label: 'Higher/Lower', icon: CurvyUpDownDirectionIcon }
 	];
 
 	let shouldSignIn = $state(false);
@@ -118,6 +121,8 @@
 				<Tower bind:balance onBalanceUpdate={handleBalanceUpdate} />
 			{:else if activeGame === 'blackjack'}
 				<Blackjack bind:balance onBalanceUpdate={handleBalanceUpdate} />
+			{:else if activeGame === 'higherlower'}
+				<HigherLower bind:balance onBalanceUpdate={handleBalanceUpdate} />
 			{/if}
 
 			<!-- Live Arcade Activity Feed -->
