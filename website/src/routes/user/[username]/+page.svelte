@@ -506,11 +506,12 @@
 							<HugeiconsIcon icon={ClockIcon} class="h-4 w-4" />
 							<span
 								><b
-								>{usersTimezone.getHours().toString().padStart(2, '0')}:{usersTimezone
+									>{usersTimezone.getHours().toString().padStart(2, '0')}:{usersTimezone
 										.getMinutes()
 										.toString()
 										.padStart(2, '0')}h</b
-								> (UTC{formatTimezone(profileData?.profile?.timezone ?? 0)})</span
+								>
+								(UTC{formatTimezone(profileData?.profile?.timezone ?? 0)})</span
 							>
 						</div>
 						<div class="text-muted-foreground flex items-center gap-2 text-sm">
