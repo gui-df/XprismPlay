@@ -43,14 +43,14 @@
 					const change = coin.priceChange24h;
 
 					if (Math.abs(change) < 0.5) {
-						return { x: coin.symbol, y: coin.marketCap, fillColor: 'rgba(107,114,128,0.3)' };
+						return { x: coin.symbol, y: coin.currentPrice, fillColor: 'rgba(107,114,128,0.3)' };
 					}
 
 					const intensity = Math.min(Math.abs(change) / 100, 1);
 					const alpha = 0.3 + intensity * 0.7;
 
 					const base = change >= 0 ? '16,163,74' : '220,38,38';
-					return { x: coin.symbol, y: coin.marketCap, fillColor: `rgba(${base},${alpha})` };
+					return { x: coin.symbol, y: coin.currentPrice, fillColor: `rgba(${base},${alpha})` };
 				})
 			}
 		],

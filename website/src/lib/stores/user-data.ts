@@ -5,6 +5,7 @@ export type User = {
 	name: string;
 	username: string;
 	email: string;
+	isHeadAdmin: boolean;
 	isAdmin: boolean;
 	image: string;
 	isBanned: boolean;
