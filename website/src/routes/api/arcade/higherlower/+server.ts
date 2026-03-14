@@ -83,6 +83,7 @@ export const POST: RequestHandler = async ({ request }) => {
 
 				const sessionKey = `higherlower:session:${sessionToken}`;
 
+				const SESSION_TTL = 300; // 5 minutes
 				await redis.set(
 					sessionKey,
 					JSON.stringify({
@@ -93,7 +94,8 @@ export const POST: RequestHandler = async ({ request }) => {
 						startTime: now,
 						userId,
 						version: 0
-					})
+					}),
+					{ EX: SESSION_TTL }
 				);
 
 				await tx
